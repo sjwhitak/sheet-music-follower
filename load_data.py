@@ -16,6 +16,26 @@ def data_generator(files, batch):
     """
     pass
 
+def data_json(json_path, subset):
+    """
+    Parameters
+    ----------
+    json_path : example.json file path
+    subset : (Str) Class of instrument used.
+        https://magenta.tensorflow.org/datasets/nsynth
+
+    Returns
+    -------
+    json_data : dict of instrument audio files
+    """
+    # Open dataset values
+    with open(json_path,'r') as fd:
+        json_data = json.loads(fd.read())
+    
+    # Trim the dataset down using only the specified subset
+    json_data = {key:val for key, val in json_data.items() if subset in key}
+    return json_data    
+
 def data_files(dataset_path, dataset_folder, subset):
     """
     Parameters
