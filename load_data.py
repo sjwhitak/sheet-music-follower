@@ -54,10 +54,8 @@ def single_data_loader(dataset_path, dataset_folder, subset):
 
     Returns
     -------
-    X : Audio data of 
-        DESCRIPTION.
-    Y : TYPE
-        DESCRIPTION.
+    X : Audio data.
+    Y : Audio labels.
 
     """
     # Open dataset values
