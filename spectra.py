@@ -2,14 +2,7 @@
 import load_data as ld
 import numpy as np
 import librosa
-import matplotlib.pyplot as plt
-import matplotlib.pylab as pylab
-pylab.rcParams.update({'legend.fontsize': 'xx-large',
-          'figure.figsize': (15, 10),
-         'axes.labelsize': 'xx-large',
-         'axes.titlesize':24,
-         'xtick.labelsize':'xx-large',
-         'ytick.labelsize':'xx-large'})
+
 
 def pitch_to_frequency(pitch):
     """
@@ -62,6 +55,16 @@ def wav_to_mel(audio_stream, n_mels, fs):
     return S, f, t
 
 if __name__ == "__main__":
+    
+    import matplotlib.pyplot as plt
+    import matplotlib.pylab as pylab
+    pylab.rcParams.update({'legend.fontsize': 'xx-large',
+              'figure.figsize': (15, 10),
+             'axes.labelsize': 'xx-large',
+             'axes.titlesize':24,
+             'xtick.labelsize':'xx-large',
+             'ytick.labelsize':'xx-large'})
+    
     # Load all the data
     dataset_path = 'dataset/'
     dataset_folder = 'test/'
