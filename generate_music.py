@@ -80,3 +80,4 @@ if __name__ == "__main__":
     
     X, Y = single_data_loader(dataset_path, dataset_folder, subset)
     song, values = generate_song_wrapper(X, Y, 30, [3,6])
+    wav.write("out.wav", 16000, song)
