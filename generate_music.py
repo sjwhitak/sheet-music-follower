@@ -37,7 +37,7 @@ def choose_unique_list(Y, N):
 # NOTE(sjwhitak): I call this a wrapper because it's not really a library
 # function, rather just a massive bulk function that does everything in
 # one go. I want to keep chopping this function up.
-def generate_song_wrapper(X, Y, N, note_range=[0,2]):
+def generate_song_wrapper(X, Y, N, note_range=[0,2], bpm=140, fs=16000):
     Y_values, Y_indices = unique_list_indices(Y)
     # For N beats,
     note_audio_list = list()
@@ -61,11 +61,21 @@ def generate_song_wrapper(X, Y, N, note_range=[0,2]):
             note_per_beat_list.append([Y_values[x] for x in midi_indices])
         else:
             pass # Rest note
-            
+        
+        # Determine length of note (half note, quarter note, eight note, etc)
+        note_speeds = [0.25, 0.5, 1, 2] # bpm is based of quarter notes
+        speed = random.choice(note_speeds)
+        
+        # Cut down note based on BPM
+        audio_len = note_audio.shape[0]
+        quarter_note_size = bpm/60 *audio_len/fs
+        size = quarter_note_size*speed
+        note_audio = note_audio[:int(audio_len/size)]
+        
         # End of beat, compile the note.
         note_audio_list.append(note_audio)
         
-    # TODO(sjwhitak): Adjust for trimming, ie, different length of notes
+    
     
     # Create a "song" of random notes.
     song = np.hstack(note_audio_list)    
@@ -79,5 +89,5 @@ if __name__ == "__main__":
     subset ='keyboard_acoustic' 
     
     X, Y = single_data_loader(dataset_path, dataset_folder, subset)
-    song, values = generate_song_wrapper(X, Y, 30, [3,6])
+    song, values = generate_song_wrapper(X, Y, 30, [0,6])
     wav.write("out.wav", 16000, song)
