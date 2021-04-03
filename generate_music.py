@@ -23,9 +23,17 @@ def unique_list_indices(x):
         if y_uniq:
             y.append(y_uniq)
     return x_uniq, y
-                
-                
-            
+
+def choose_unique_list(Y, N):
+    # Y is output of unique_list_indices, so
+    # >>> x_val, x_ind = unique_list_indices(x)
+    # >>> y_val, y_ind = __choose_notes(x_ind, 2) // Choosing 2 in the list
+    Y_rand = random.choices(list(enumerate(Y)), k=N)
+    Y_values = [y[1] for y in Y_rand] # values
+    Y_indices = [y[0] for y in Y_rand]    # indices
+    return Y_values, Y_indices
+
+
 # NOTE(sjwhitak): I call this a wrapper because it's not really a library
 # function, rather just a massive bulk function that does everything in
 # one go. I want to keep chopping this function up.
@@ -43,9 +51,7 @@ def generate_song_wrapper(X, Y, N, note_range=[0,2]):
         if note_count != 0:
     
             # Choose notes at random
-            rand_midi = random.choices(list(enumerate(Y_indices)), k=note_count)
-            midi_values = [x[1] for x in rand_midi] # values
-            midi_indices = [x[0] for x in rand_midi]    # indices
+            midi_values, midi_indices = choose_unique_list(Y_indices, note_count)
             midi_list.append(midi_values) # values
             
             # Choose random note inside this list of all these pitches
