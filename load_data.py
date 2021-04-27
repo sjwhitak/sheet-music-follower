@@ -85,20 +85,21 @@ def single_data_loader(dataset_path, dataset_folder, subset):
     # Trim the dataset down using only the specified subset
     json_data = {key:val for key, val in json_data.items() if subset in key}
     
+    
     # Open up specific audio files
-    audio_files = [dataset_path+'nsynth-'+
+    audio_files = sorted([dataset_path+'nsynth-'+
                    dataset_folder+'audio/'+json_data[data]['note_str']+
-                   '.wav' for data in json_data]
+                   '.wav' for data in json_data])
     
     # TODO(sjwhitak): This loads ALL the data at once. Convert to data loader
     # when working with training data, else it will be very slow.
     # Once data_generator() works, will change to WARN.
     audio_data = [wav.read(file)[1]/32768.0 for file in audio_files]
-    pitch = [json_data[data]['pitch'] for data in json_data]
+    pitch = [json_data[data[-33:-4]]['pitch'] for data in audio_files]
     
     # NOTE(sjwhitak): These are parameters on the distortions on the audio.
     # Maybe we want to have this as input?
-    qualities = [json_data[data]['qualities'] for data in json_data]
+    qualities = [json_data[data[-33:-4]]['qualities'] for data in audio_files]
     
     Y = pitch
     X = audio_data
@@ -124,7 +125,7 @@ if __name__ == "__main__":
     #         \---- file.wav (12678 files)
     #         \---- ...
     dataset_path = 'dataset/'
-    dataset_folder = 'train/'
+    dataset_folder = 'test/'
     
     # NOTE(sjwhitak): We're only doing the piano, so this removes, 
     # like 90% of the other data in our dataset.
