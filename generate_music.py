@@ -43,6 +43,7 @@ def generate_song_wrapper(X, Y, N, note_range=[0,2], bpm=140, fs=16000):
     note_audio_list = list()
     midi_list = list()
     note_per_beat_list = list()
+    beats = list()
     for n in range(N):
         note_audio = np.zeros(X[0].shape)
         
@@ -60,6 +61,7 @@ def generate_song_wrapper(X, Y, N, note_range=[0,2], bpm=140, fs=16000):
                 note_audio += X[r]
             note_per_beat_list.append([Y_values[x] for x in midi_indices])
         else:
+            note_per_beat_list.append([0])
             pass # Rest note
         
         # Determine length of note (half note, quarter note, eight note, etc)
@@ -74,12 +76,11 @@ def generate_song_wrapper(X, Y, N, note_range=[0,2], bpm=140, fs=16000):
         
         # End of beat, compile the note.
         note_audio_list.append(note_audio)
-        
-    
+        beats.append(speed)
     
     # Create a "song" of random notes.
     song = np.hstack(note_audio_list)    
-    return song, note_per_beat_list
+    return song, note_per_beat_list, beats
 
 
 
@@ -89,5 +90,5 @@ if __name__ == "__main__":
     subset ='keyboard_acoustic' 
     
     X, Y = single_data_loader(dataset_path, dataset_folder, subset)
-    song, values = generate_song_wrapper(X, Y, 30, [0,6])
+    song, values, length = generate_song_wrapper(X, Y, 30, [0,6])
     wav.write("out.wav", 16000, song)

@@ -124,7 +124,7 @@ if __name__ == "__main__":
     #         \---- file.wav (12678 files)
     #         \---- ...
     dataset_path = 'dataset/'
-    dataset_folder = 'test/'
+    dataset_folder = 'train/'
     
     # NOTE(sjwhitak): We're only doing the piano, so this removes, 
     # like 90% of the other data in our dataset.
