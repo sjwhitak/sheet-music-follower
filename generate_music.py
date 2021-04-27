@@ -3,6 +3,7 @@ from load_data import single_data_loader
 from spectra import pitch_to_frequency
 import random
 import numpy as np
+import json
 from scipy.io import wavfile as wav
 
 def unique_list_indices(x):
@@ -91,4 +92,6 @@ if __name__ == "__main__":
     
     X, Y = single_data_loader(dataset_path, dataset_folder, subset)
     song, values, length = generate_song_wrapper(X, Y, 30, [0,6])
-    wav.write("out.wav", 16000, song)
+    wav.write("out.wav", 16000, song.astype(np.float32))
+    with open("midi_encodings.json", "w") as file:
+      file.write(json.dumps(values))
