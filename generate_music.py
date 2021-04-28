@@ -38,7 +38,7 @@ def choose_unique_list(Y, N):
 # NOTE(sjwhitak): I call this a wrapper because it's not really a library
 # function, rather just a massive bulk function that does everything in
 # one go. I want to keep chopping this function up.
-def generate_song_wrapper(X, Y, N, note_range=[0,2], bpm=140, fs=16000):
+def generate_song_wrapper(X, Y, N, note_range=[0,2], bpm=120, fs=16000):
     Y_values, Y_indices = unique_list_indices(Y)
     # For N beats,
     note_audio_list = list()
@@ -49,7 +49,7 @@ def generate_song_wrapper(X, Y, N, note_range=[0,2], bpm=140, fs=16000):
         note_audio = np.zeros(X[0].shape)
         
         # Choose how many notes are played in this beat
-        note_count = random.randrange(note_range[0], note_range[1])
+        note_count = 1#random.randrange(note_range[0], note_range[1])
         if note_count != 0:
     
             # Choose notes at random
@@ -67,7 +67,7 @@ def generate_song_wrapper(X, Y, N, note_range=[0,2], bpm=140, fs=16000):
         
         # Determine length of note (half note, quarter note, eight note, etc)
         note_speeds = [0.25, 0.5, 1, 2] # bpm is based of quarter notes
-        speed = random.choice(note_speeds)
+        speed = 1#random.choice(note_speeds)
         
         # Cut down note based on BPM
         audio_len = note_audio.shape[0]
@@ -87,11 +87,29 @@ def generate_song_wrapper(X, Y, N, note_range=[0,2], bpm=140, fs=16000):
 
 if __name__ == "__main__":
     dataset_path = 'dataset/'
-    dataset_folder = 'test/'
     subset ='keyboard_acoustic' 
+
     
+    # Generate training data
+    dataset_folder = 'train/'
     X, Y = single_data_loader(dataset_path, dataset_folder, subset)
-    song, values, length = generate_song_wrapper(X, Y, 30, [0,6])
-    wav.write("out.wav", 16000, song.astype(np.float32))
-    with open("midi_encodings.json", "w") as file:
-      file.write(json.dumps(values))
+    song, values, length = generate_song_wrapper(X, Y, 10000, [0,3])
+    wav.write("train.wav", 16000, song.astype(np.float32))
+    np.save("train_labels.npy", np.array(values))
+    print("Training data generated")
+    
+    # Generate validation data
+    dataset_folder = 'valid/'
+    X, Y = single_data_loader(dataset_path, dataset_folder, subset)
+    song, values, length = generate_song_wrapper(X, Y, 1000, [0,3])
+    wav.write("valid.wav", 16000, song.astype(np.float32))
+    np.save("valid_labels.npy", np.array(values))
+    print("Validation data generated")
+        
+    # Generate test data
+    dataset_folder = 'test/'
+    X, Y = single_data_loader(dataset_path, dataset_folder, subset)
+    song, values, length = generate_song_wrapper(X, Y, 1000, [0,3])
+    wav.write("test.wav", 16000, song.astype(np.float32))
+    np.save("test_labels.npy", np.array(values))
+    print("Test data generated")
