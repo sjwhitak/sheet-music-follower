@@ -88,12 +88,11 @@ def generate_song_wrapper(X, Y, N, note_range=[0,2], bpm=120, fs=16000):
 if __name__ == "__main__":
     dataset_path = 'dataset/'
     subset ='keyboard_acoustic' 
-
     
     # Generate training data
     dataset_folder = 'train/'
     X, Y = single_data_loader(dataset_path, dataset_folder, subset)
-    song, values, length = generate_song_wrapper(X, Y, 10000, [0,3])
+    song, values, length = generate_song_wrapper(X, Y, 4000, [0,3])
     wav.write("train.wav", 16000, song.astype(np.float32))
     np.save("train_labels.npy", np.array(values))
     print("Training data generated")
@@ -101,7 +100,7 @@ if __name__ == "__main__":
     # Generate validation data
     dataset_folder = 'valid/'
     X, Y = single_data_loader(dataset_path, dataset_folder, subset)
-    song, values, length = generate_song_wrapper(X, Y, 1000, [0,3])
+    song, values, length = generate_song_wrapper(X, Y, 400, [0,3])
     wav.write("valid.wav", 16000, song.astype(np.float32))
     np.save("valid_labels.npy", np.array(values))
     print("Validation data generated")
@@ -109,7 +108,7 @@ if __name__ == "__main__":
     # Generate test data
     dataset_folder = 'test/'
     X, Y = single_data_loader(dataset_path, dataset_folder, subset)
-    song, values, length = generate_song_wrapper(X, Y, 1000, [0,3])
+    song, values, length = generate_song_wrapper(X, Y, 400, [0,3])
     wav.write("test.wav", 16000, song.astype(np.float32))
     np.save("test_labels.npy", np.array(values))
     print("Test data generated")
