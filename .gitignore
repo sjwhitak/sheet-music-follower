@@ -1,3 +1,5 @@
 __pycache__/
 dataset/
 *.wav
+*.npy
+*.h5
